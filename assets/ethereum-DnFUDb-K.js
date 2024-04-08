@@ -1,1 +1,0 @@
-import{d as e}from"./index-D4cLBfaq.js";const t=e({id:1,name:"Ethereum",nativeCurrency:{name:"Ether",symbol:"ETH",decimals:18},blockExplorers:[{name:"Etherscan",url:"https://etherscan.io"}]});export{t as e};
