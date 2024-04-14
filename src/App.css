@@ -1,0 +1,60 @@
+.mini-app {
+  background: #15317e;
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.connect-wallet-btn {
+  margin-top: 20px;
+}
+
+.account-info {
+  width: calc(100% - 50px);
+  margin: 50px 0 50px 0;
+}
+
+.account-wallet {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 5px 0 5px 0;
+  margin-top: 20px;
+}
+
+.account-wallet div {
+  margin-left: 5px;
+}
+
+.balance-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.balance {
+  margin-top: 20px;
+  width: 50%;
+}
+
+.balance span {
+  margin-left: 10px;
+}
+
+.balance img {
+  width: 20px;
+  height: auto;
+}
