@@ -1,12 +1,14 @@
 import { createThirdwebClient, getContract } from "thirdweb";
+import { BinanceTestnet } from "@thirdweb-dev/chains";
 
 const chain = {
-  id: import.meta.env.VITE_BNB_CHAIN_ID,
-  rpc: import.meta.env.VITE_BNB_RPC,
+  id: BinanceTestnet.chainId,
+  rpc: BinanceTestnet.rpc[1],
+  url: BinanceTestnet.explorers[0].url,
 };
+
 const client = createThirdwebClient({
   clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID,
-  secretKey: import.meta.env.VITE_THIRDWEB_SECRET_KEY,
 });
 
 const contract = getContract({

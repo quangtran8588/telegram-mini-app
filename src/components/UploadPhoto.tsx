@@ -1,46 +1,97 @@
-import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useRef, useState } from "react";
+import { Box, Input, Stack, keyframes } from "@chakra-ui/react";
+import { useAppContext } from "../hooks/useAppContext";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
-
-interface Props {
-  onSetAmount: (amount: number) => void;
-  nextStage: React.Dispatch<React.SetStateAction<number>>;
+function genRandomAmount(): number {
+  return Number((Math.random() * 1000 + 50).toFixed(2));
 }
 
-export default function UploadPhoto({ onSetAmount, nextStage }: Props) {
-  //  set mocking payment amount
-  const paymentAmount = 250.5;
+const shakeAnimation = keyframes`
+  10%, 90% {
+    transform: translated3d(-3px, 0, 0)
+  }
+  20%, 80% {
+    transform: translated3d(3px, 0, 0)
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-6px, 0, 0)
+  }
+  40%, 60% {
+    transform: translated3d(6px, 0, 0)
+  }
+`;
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+const hoverEffect = {
+  opacity: 1,
+  borderColor: "red.300",
+  color: "red.100",
+  boxShadow: "linear(to-r, red.500, yellow.500)",
+  animation: `${shakeAnimation} infinite 0.5s`,
+};
+
+export default function UploadPhoto() {
+  const { isMobile, onSetFile, onSetAmount, onSetStage } = useAppContext();
+  const [isHovered, setIsHovered] = useState(false);
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+
+  //  set mocking payment amount
+  const paymentAmount: number = genRandomAmount();
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
     //  do something with uploaded files
-
+    onSetFile(e.target.files[0]);
     onSetAmount(paymentAmount);
-    nextStage((current) => current + 1);
+    onSetStage((current) => current + 1);
   };
+
+  const handleClick = () => {
+    hiddenFileInput?.current?.click();
+  };
+
+  const handleMouseEnter = () => {
+    if (isMobile) return;
+    setIsHovered(true);
+  };
+  const handleMouseLeave = () => {
+    if (isMobile) return;
+    setIsHovered(false);
+  };
+
   return (
-    <Button
-      component="label"
-      role={undefined}
-      variant="contained"
-      tabIndex={-1}
-      startIcon={<CloudUploadIcon />}
-    >
-      Upload file
-      <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
-    </Button>
+    <Stack>
+      <Box
+        as="button"
+        bg={`url(${
+          isMobile
+            ? "./images/fire-flames.gif"
+            : isHovered
+            ? "./images/fire-flames.gif"
+            : "./images/chemistry-fire.gif"
+        })`}
+        w="auto"
+        h="auto"
+        backgroundSize="cover"
+        backgroundRepeat="no-repeat"
+        border="1px solid transparent"
+        borderRadius="15px"
+        cursor="pointer"
+        padding="8px 16px"
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        sx={isMobile ? { ...hoverEffect } : {}}
+        _hover={{ ...hoverEffect }}
+      >
+        {isHovered ? "Click Me" : "Upload File"}
+      </Box>
+      <Input
+        type="file"
+        onChange={handleFileUpload}
+        ref={hiddenFileInput}
+        hidden
+      ></Input>
+    </Stack>
   );
 }

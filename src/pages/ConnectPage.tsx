@@ -1,28 +1,40 @@
-import { Wallet } from "thirdweb/wallets";
+import { Center, Flex, Text, VStack } from "@chakra-ui/react";
+
 import ConnectWallet from "../components/ConnectWallet";
-import Message from "../components/Message";
+import { useAppContext } from "../hooks/useAppContext";
 
-interface Props {
-  stage: number;
-  amount: number;
-  handleSetWallet: (wallet: Wallet) => void;
-  nextStage: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function ConnectPage({
-  stage,
-  amount,
-  handleSetWallet,
-  nextStage,
-}: Props) {
+export default function ConnectPage() {
+  const { stage, amount } = useAppContext();
   return (
-    <div>
+    <>
       {stage === 1 && amount !== 0 && (
-        <>
-          <Message>Your payment amount: {amount}</Message>
-          <ConnectWallet onSetWallet={handleSetWallet} nextStage={nextStage} />
-        </>
+        <Center width="100vw" height="100vh">
+          <Flex direction="column" align="center" justify="center">
+            <VStack spacing="50px">
+              <VStack spacing="10px">
+                <Text
+                  bgGradient="linear(to-l, #7928CA, #FF0080)"
+                  bgClip="text"
+                  fontSize="m"
+                  fontWeight="extrabold"
+                >
+                  Your payment amount
+                </Text>
+                <Text
+                  bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"
+                  bgClip="text"
+                  fontSize="xl"
+                  fontWeight="extrabold"
+                >
+                  {amount}
+                </Text>
+              </VStack>
+
+              <ConnectWallet />
+            </VStack>
+          </Flex>
+        </Center>
       )}
-    </div>
+    </>
   );
 }

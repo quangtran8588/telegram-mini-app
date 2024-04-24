@@ -1,37 +1,41 @@
-import React from "react";
-import { Wallet } from "thirdweb/wallets";
-import Message from "../components/Message";
+import { Center, Flex, VStack, Text } from "@chakra-ui/react";
+
 import Transfer from "../components/Transfer";
 import AccountInfo from "../components/AccountInfo";
+import { useAppContext } from "../hooks/useAppContext";
 
-interface Props {
-  stage: number;
-  wallet?: Wallet;
-  amount: number;
-  setTxHash: (txHash: string) => void;
-  nextStage: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export default function PaymentPage({
-  stage,
-  wallet,
-  amount,
-  setTxHash,
-  nextStage,
-}: Props) {
+export default function PaymentPage() {
+  const { stage, wallet, amount } = useAppContext();
   return (
-    <div className="payment-page">
+    <>
       {stage === 2 && wallet && (
-        <>
-          <Message>Your payment amount: {amount}</Message>
-          <AccountInfo wallet={wallet} />
-          <Transfer
-            paymentAmount={amount}
-            setTxHash={setTxHash}
-            nextStage={nextStage}
-          />
-        </>
+        <Center width="100vw" height="100vh">
+          <Flex direction="column" align="center" justify="center">
+            <VStack spacing="10px">
+              <Text
+                bgGradient="linear(to-l, #7928CA, #FF0080)"
+                bgClip="text"
+                fontSize="m"
+                fontWeight="extrabold"
+              >
+                Your payment amount
+              </Text>
+              <Text
+                bgGradient="linear(to-r, gray.300, yellow.400, pink.200)"
+                bgClip="text"
+                fontSize="xl"
+                fontWeight="extrabold"
+              >
+                {amount}
+              </Text>
+            </VStack>
+
+            <AccountInfo />
+
+            <Transfer />
+          </Flex>
+        </Center>
       )}
-    </div>
+    </>
   );
 }

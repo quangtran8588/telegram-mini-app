@@ -1,18 +1,23 @@
 import { useState } from "react";
 import { ThirdwebProvider } from "thirdweb/react";
 import { Wallet } from "thirdweb/wallets";
+import { Container } from "@chakra-ui/react";
+import { isMobile } from "react-device-detect";
 
 import HomePage from "./pages/HomePage";
 import ConnectPage from "./pages/ConnectPage";
 import PaymentPage from "./pages/PaymentPage";
 import ResultPage from "./pages/ResultPage";
-import "./App.css";
+import { AppContext } from "./hooks/useAppContext";
 
 export default function App() {
   const [amount, setAmount] = useState<number>(0);
   const [stage, setStage] = useState<number>(0);
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
   const [txHash, setTxHash] = useState<string>("");
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [file, setFile] = useState<File>();
 
   const handleSetAmount = (paymentAmount: number) => {
     setAmount(paymentAmount);
@@ -26,6 +31,10 @@ export default function App() {
     setTxHash(hash);
   };
 
+  const handleSetFile = (uploadedFile: File) => {
+    setFile(uploadedFile);
+  };
+
   const handleReset = () => {
     setStage((current) => current - current);
     async function disconnect() {
@@ -37,34 +46,30 @@ export default function App() {
     setWallet(undefined);
   };
 
+  const contextValue = {
+    isMobile: isMobile,
+    amount: amount,
+    onSetAmount: handleSetAmount,
+    stage: stage,
+    onSetStage: setStage,
+    wallet: wallet,
+    onSetWallet: handleSetWallet,
+    txHash: txHash,
+    onSetTxHash: handleSetTxHash,
+    file: file,
+    onSetFile: handleSetFile,
+  };
+
   return (
-    <div className="mini-app">
-      <HomePage
-        stage={stage}
-        handleSetAmount={handleSetAmount}
-        nextStage={setStage}
-      />
-      <ThirdwebProvider>
-        <ConnectPage
-          stage={stage}
-          amount={amount}
-          handleSetWallet={handleSetWallet}
-          nextStage={setStage}
-        />
-        <PaymentPage
-          stage={stage}
-          amount={amount}
-          wallet={wallet}
-          setTxHash={handleSetTxHash}
-          nextStage={setStage}
-        />
-        <ResultPage
-          stage={stage}
-          wallet={wallet}
-          txHash={txHash}
-          onReset={handleReset}
-        />
-      </ThirdwebProvider>
-    </div>
+    <AppContext.Provider value={contextValue}>
+      <Container centerContent>
+        <HomePage />
+        <ThirdwebProvider>
+          <ConnectPage />
+          <PaymentPage />
+          <ResultPage onReset={handleReset} />
+        </ThirdwebProvider>
+      </Container>
+    </AppContext.Provider>
   );
 }

@@ -1,7 +1,15 @@
-import { useEffect, useState } from "react";
-import { GetWalletBalanceOptions, getWalletBalance } from "thirdweb/wallets";
-import { chain, client } from "../types";
-import { zeroAddress, TokenInfo } from "../tokens";
+import {
+  Card,
+  CardBody,
+  Grid,
+  GridItem,
+  HStack,
+  Image,
+  Text,
+} from "@chakra-ui/react";
+
+import { TokenInfo } from "../tokens";
+import useBalance from "../hooks/useBalance";
 
 interface Props {
   address: string;
@@ -16,29 +24,38 @@ function humanize(x: number) {
 }
 
 export default function Balance({ address, token }: Props) {
-  const [balance, setBalance] = useState<number>(0);
-
-  useEffect(() => {
-    const options: GetWalletBalanceOptions = {
-      address: address,
-      client: client,
-      chain: chain,
-      tokenAddress: token.address !== zeroAddress ? token.address : "",
-    };
-
-    async function getBalance() {
-      const result = await getWalletBalance(options);
-      setBalance(Number(result.displayValue));
-    }
-
-    getBalance();
-  }, [address, token.address]);
+  const balance = useBalance(address, token);
 
   return (
-    <div className="balance">
-      <img src={token.icon ? token.icon : defaultIcon} alt={token.symbol} />
-      <span>{humanize(balance)}</span>
-      <span>{token.symbol}</span>
-    </div>
+    <Card variant="elevated" width="150px">
+      <CardBody pt="10px" pb="1px" pl="10px" pr="10px">
+        <Grid
+          templateColumns="repeat(5, 1fr)"
+          templateRows="repeat(2, 1fr)"
+          gap={1}
+        >
+          <GridItem rowSpan={1} colSpan={8}>
+            <HStack
+              justifyContent="center"
+              borderStyle="dashed"
+              borderBottomWidth="1px"
+              pb="5px"
+              spacing="10px"
+            >
+              <Image
+                boxSize="25px"
+                objectFit="cover"
+                src={token.icon ? token.icon : defaultIcon}
+                alt={token.symbol}
+              />
+              <Text fontSize="sm">{token.symbol}</Text>
+            </HStack>
+          </GridItem>
+          <GridItem rowSpan={1} colSpan={8} textAlign="center">
+            <Text fontSize="sm">{humanize(balance)}</Text>
+          </GridItem>
+        </Grid>
+      </CardBody>
+    </Card>
   );
 }

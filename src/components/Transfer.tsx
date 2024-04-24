@@ -1,38 +1,31 @@
 import { useState } from "react";
 import { TransactionButton } from "thirdweb/react";
 import { prepareContractCall, toWei } from "thirdweb";
-import { contract, paymentReceiver } from "../types";
 import { TransactionReceipt } from "thirdweb/dist/types/transaction/types";
-import Message from "./Message";
 
-interface Props {
-  paymentAmount: number;
-  setTxHash: (txHash: string) => void;
-  nextStage: React.Dispatch<React.SetStateAction<number>>;
-}
+import { contract, paymentReceiver } from "../types";
+import { Stack, Text } from "@chakra-ui/react";
+import { useAppContext } from "../hooks/useAppContext";
 
-export default function Transfer({
-  paymentAmount,
-  setTxHash,
-  nextStage,
-}: Props) {
+export default function Transfer() {
   const [error, setError] = useState<Error>();
+  const { onSetTxHash, onSetStage, amount } = useAppContext();
 
   const handleTxConfirmed = (receipt: TransactionReceipt) => {
-    setTxHash(receipt.transactionHash);
-    nextStage((current) => current + 1);
+    onSetTxHash(receipt.transactionHash);
+    onSetStage((current) => current + 1);
   };
   const handleTxError = (error: Error) => {
     setError(error);
   };
   return (
-    <>
+    <Stack>
       <TransactionButton
         transaction={() => {
           const tx = prepareContractCall({
             contract,
             method: "function transfer(address to, uint256 amount)",
-            params: [paymentReceiver, toWei(paymentAmount.toString())],
+            params: [paymentReceiver, toWei(amount.toString())],
           });
           return tx;
         }}
@@ -41,7 +34,7 @@ export default function Transfer({
       >
         Transfer
       </TransactionButton>
-      {error && <Message>{error.message}</Message>}
-    </>
+      {error && <Text>{error.message}</Text>}
+    </Stack>
   );
 }

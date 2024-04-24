@@ -1,16 +1,15 @@
-import { Wallet } from "thirdweb/wallets";
+import { Box } from "@chakra-ui/react";
+
 import AccountWallet from "./AccountWallet";
 import BalanceList from "./BalanceList";
+import { useAppContext } from "../hooks/useAppContext";
 
-interface Props {
-  wallet: Wallet;
-}
-
-export default function AccountInfo({ wallet }: Props) {
+export default function AccountInfo() {
+  const { wallet } = useAppContext();
   return (
-    <div className="account-info">
-      <AccountWallet address={wallet.getAccount()?.address as string} />
-      <BalanceList wallet={wallet} />
-    </div>
+    <Box mt="20px" mb="50px">
+      <AccountWallet address={wallet?.getAccount()?.address as string} />
+      <BalanceList />
+    </Box>
   );
 }

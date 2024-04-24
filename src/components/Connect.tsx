@@ -1,6 +1,7 @@
 import { useConnect } from "thirdweb/react";
 import { Wallet, createWallet, injectedProvider } from "thirdweb/wallets";
 import { BinanceTestnet } from "@thirdweb-dev/chains";
+
 import { client } from "../types";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
   nextStage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function ConnectButton({ onSetWallet, nextStage }: Props) {
+export default function Connect({ onSetWallet, nextStage }: Props) {
   const { connect, isConnecting, error } = useConnect();
 
   const handleConnectWallet = async () => {

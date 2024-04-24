@@ -1,30 +1,35 @@
 import { ConnectButton } from "thirdweb/react";
 import { Wallet, createWallet } from "thirdweb/wallets";
+
 import { client, chain, appMetadata } from "../types";
+import { useAppContext } from "../hooks/useAppContext";
 
-interface Props {
-  onSetWallet: (wallet: Wallet) => void;
-  nextStage: React.Dispatch<React.SetStateAction<number>>;
-}
+const MetaMask = createWallet("io.metamask");
+const WalletConnect = createWallet("walletConnect");
 
-const wallets = [createWallet("io.metamask"), createWallet("walletConnect")];
+export default function ConnectWallet() {
+  const { isMobile, onSetWallet, onSetStage } = useAppContext();
 
-export default function ConnectWallet({ onSetWallet, nextStage }: Props) {
+  let wallets: Wallet[];
+  if (!isMobile) {
+    wallets = [MetaMask, WalletConnect];
+  } else {
+    wallets = [WalletConnect];
+  }
+
   const handleConnect = (connectedWallet: Wallet) => {
     onSetWallet(connectedWallet);
-    nextStage((current) => current + 1);
+    onSetStage((current) => current + 1);
   };
 
   return (
-    <div className="connect-wallet-btn">
-      <ConnectButton
-        appMetadata={appMetadata}
-        client={client}
-        wallets={wallets}
-        onConnect={handleConnect}
-        autoConnect={false}
-        chain={chain}
-      />
-    </div>
+    <ConnectButton
+      appMetadata={appMetadata}
+      client={client}
+      wallets={wallets}
+      onConnect={handleConnect}
+      autoConnect={false}
+      chain={chain}
+    />
   );
 }
