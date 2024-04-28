@@ -5,19 +5,19 @@ export interface AppContextObject {
   isMobile: boolean;
 
   amount: number;
-  onSetAmount: (amount: number) => void;
+  onSetAmount: React.Dispatch<React.SetStateAction<number>>;
 
   stage: number;
   onSetStage: React.Dispatch<React.SetStateAction<number>>;
 
   wallet?: Wallet;
-  onSetWallet: (connectedWallet: Wallet) => void;
+  onSetWallet: React.Dispatch<React.SetStateAction<Wallet | undefined>>;
 
   txHash: string;
-  onSetTxHash: (txHash: string) => void;
+  onSetTxHash: React.Dispatch<React.SetStateAction<string>>;
 
   file?: File;
-  onSetFile: (uploadedFile: File) => void;
+  onSetFile: React.Dispatch<React.SetStateAction<File | undefined>>;
 }
 
 export const AppContext = createContext<AppContextObject | undefined>(

@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "theme": "chakra-cli tokens ./src/themes/theme.ts",
+    "theme:watch": "chakra-cli tokens ./src/themes/theme.ts --watch",
     "dev": "vite",
     "build": "tsc && vite build",
     "configbot": "node configure.js",
@@ -23,10 +25,13 @@
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.1.0",
+    "react-swipeable": "^7.0.1",
     "thirdweb": "^5.2.0",
     "vite-plugin-node-polyfills": "^0.21.0"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^2.4.1",
     "@types/node": "^20.12.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

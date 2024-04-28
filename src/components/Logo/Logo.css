@@ -32,6 +32,8 @@
   stroke-dasharray: 354;
   stroke-dashoffset: 354;
   animation: line-animation 30s ease infinite 1.5s;
+  animation: name duration timing-function delay iteration-count direction
+    fill-mode;
 }
 
 #logo path:nth-child(4) {

@@ -19,28 +19,8 @@ export default function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [file, setFile] = useState<File>();
 
-  const handleSetAmount = (paymentAmount: number) => {
-    setAmount(paymentAmount);
-  };
-
-  const handleSetWallet = (connectedWallet: Wallet) => {
-    setWallet(connectedWallet);
-  };
-
-  const handleSetTxHash = (hash: string) => {
-    setTxHash(hash);
-  };
-
-  const handleSetFile = (uploadedFile: File) => {
-    setFile(uploadedFile);
-  };
-
   const handleReset = () => {
     setStage((current) => current - current);
-    async function disconnect() {
-      await wallet?.disconnect();
-    }
-    disconnect();
     setAmount((currentAmt) => currentAmt - currentAmt);
     setTxHash("");
     setWallet(undefined);
@@ -49,15 +29,15 @@ export default function App() {
   const contextValue = {
     isMobile: isMobile,
     amount: amount,
-    onSetAmount: handleSetAmount,
+    onSetAmount: setAmount,
     stage: stage,
     onSetStage: setStage,
     wallet: wallet,
-    onSetWallet: handleSetWallet,
+    onSetWallet: setWallet,
     txHash: txHash,
-    onSetTxHash: handleSetTxHash,
+    onSetTxHash: setTxHash,
     file: file,
-    onSetFile: handleSetFile,
+    onSetFile: setFile,
   };
 
   return (

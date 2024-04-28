@@ -1,19 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ChakraProvider } from "@chakra-ui/react";
+
 import App from "./App.tsx";
-
-import {
-  ChakraProvider,
-  type ThemeConfig,
-  extendTheme,
-} from "@chakra-ui/react";
-
-const config: ThemeConfig = {
-  initialColorMode: "dark", // 'dark' | 'light'
-  useSystemColorMode: true,
-};
-
-const theme = extendTheme({ config });
+import theme from "./themes/theme.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

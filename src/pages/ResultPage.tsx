@@ -48,7 +48,14 @@ export default function ResultPage({ onReset }: Props) {
             </VStack>
 
             <AccountInfo />
-            <Button onClick={handleOnClick}>Done</Button>
+            <Button
+              onClick={handleOnClick}
+              bgColor="white"
+              color="black"
+              fontSize="sm"
+            >
+              Done
+            </Button>
           </Flex>
         </Center>
       )}

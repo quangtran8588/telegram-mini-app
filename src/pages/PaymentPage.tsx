@@ -1,20 +1,50 @@
-import { Center, Flex, VStack, Text } from "@chakra-ui/react";
+import { Flex, VStack, Text, Stack, Box } from "@chakra-ui/react";
+import { useDisconnect } from "thirdweb/react";
 
 import Transfer from "../components/Transfer";
 import AccountInfo from "../components/AccountInfo";
 import { useAppContext } from "../hooks/useAppContext";
+import Back from "../components/Back";
+import { useSwipeable } from "react-swipeable";
 
 export default function PaymentPage() {
-  const { stage, wallet, amount } = useAppContext();
+  const { isMobile, stage, wallet, amount, onSetWallet, onSetStage } =
+    useAppContext();
+  const { disconnect } = useDisconnect();
+
+  const goBack = () => {
+    if (wallet) disconnect(wallet);
+    onSetWallet(undefined);
+    onSetStage((current) => current - 1);
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => {
+      if (isMobile) goBack();
+    },
+  });
+
   return (
     <>
       {stage === 2 && wallet && (
-        <Center width="100vw" height="100vh">
-          <Flex direction="column" align="center" justify="center">
+        <Stack
+          width="100vw"
+          height="100vh"
+          flexDirection="row"
+          align="center"
+          {...swipeHandlers}
+        >
+          {!isMobile && (
+            <Box boxSize="50px">
+              <Back action={goBack} />
+            </Box>
+          )}
+
+          <Flex direction="column" align="center" justify="center" flex="1">
             <VStack spacing="10px">
               <Text
-                bgGradient="linear(to-l, #7928CA, #FF0080)"
                 bgClip="text"
+                bgGradient="linear(to-l, #7928CA, #FF0080)"
                 fontSize="m"
                 fontWeight="extrabold"
               >
@@ -34,7 +64,7 @@ export default function PaymentPage() {
 
             <Transfer />
           </Flex>
-        </Center>
+        </Stack>
       )}
     </>
   );
